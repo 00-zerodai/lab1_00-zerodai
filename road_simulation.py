@@ -97,24 +97,41 @@ def count_signs(road_list):
 
 # ==================== PART 3: SAFE INPUT AND JOURNEY SUMMARY ====================
 
+def report_input_error(reason, low, high):
+    print(f"  {reason} Please enter a whole number from {low} to {high}.")
+
+
+def validate_road(road_list):
+    if not isinstance(road_list, list):
+        return False, "Road data must be a list."
+    if not road_list:
+        return False, "The road must contain at least one segment."
+    for index, sign in enumerate(road_list):
+        if sign != "road" and not is_valid_sign(sign):
+            return False, f"Invalid sign at segment {index}: {sign!r}."
+    return True, ""
+
+
 # TODO 7: Keep asking until the user types a whole number from low to high.
 # Use try/except for text that is not a number. Return the number as an int.
 def ask_for_number(question, low, high):
+    if not isinstance(low, int) or not isinstance(high, int) or low > high:
+        raise ValueError("The input range must have integer bounds with low <= high.")
     while True:
         try:
             number = int(input(question))
         except ValueError:
-            print(f"  Please enter a whole number from {low} to {high}.")
+            report_input_error("Invalid input.", low, high)
             continue
         if low <= number <= high:
             return number
-        print(f"  Please enter a whole number from {low} to {high}.")
+        report_input_error("Number is outside the allowed range.", low, high)
 
 
 # TODO 8: Insert sign at position. Return False if position is not from 0 to len(road_list).
 # Otherwise insert and return True.
 def insert_sign(road_list, sign, position):
-    if not is_valid_sign(sign) or not isinstance(position, int):
+    if not isinstance(road_list, list) or not is_valid_sign(sign) or type(position) is not int:
         return False
     if not 0 <= position <= len(road_list):
         return False
@@ -125,7 +142,7 @@ def insert_sign(road_list, sign, position):
 # TODO 9: Replace the sign at index with a new sign. Return False if index is not
 # from 0 to len(road_list) - 1. Otherwise replace it and return True.
 def replace_sign(road_list, sign, index):
-    if not is_valid_sign(sign) or not isinstance(index, int):
+    if not isinstance(road_list, list) or not is_valid_sign(sign) or type(index) is not int:
         return False
     if not 0 <= index < len(road_list):
         return False
@@ -149,4 +166,14 @@ def get_journey_summary(road_list):
 if __name__ == "__main__":
     import sys
     import transit_program
-    transit_program.run(sys.modules[__name__])
+
+    road_is_valid, road_error = validate_road(road)
+    if not road_is_valid:
+        print(f"Road data error: {road_error}", file=sys.stderr)
+        sys.exit(1)
+
+    try:
+        transit_program.run(sys.modules[__name__])
+    except EOFError:
+        print("\nInput ended before the simulation was complete.", file=sys.stderr)
+        sys.exit(1)

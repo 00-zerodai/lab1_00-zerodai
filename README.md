@@ -47,6 +47,13 @@ Allowed signs are:
 
 Use the road editor to change the road while the program is running. It validates signs and asks for positions within the available range. The car accelerates by up to 5 km/h per simulation step and brakes by up to 20 km/h per step, without overshooting its target speed.
 
+## Input and error handling
+
+- Road signs must be `bus`, `zebra`, or a speed limit written as text from `20` to `100`. `road` is used for plain segments in the route.
+- Menu and editor positions are requested within their valid ranges. Invalid text and out-of-range numbers show an explanation and are requested again.
+- The road is checked before the program starts; an empty, non-list, or invalid road produces an error message instead of starting the simulation.
+- If terminal input ends unexpectedly (for example, end-of-file), the program reports that the simulation stopped rather than showing a traceback.
+
 ## Log analyser (optional)
 
 Each run appends events and the trip report to `transit_session.log` in the project folder. After a run, summarize the log with:
