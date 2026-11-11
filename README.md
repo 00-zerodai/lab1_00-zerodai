@@ -21,7 +21,7 @@ The simulation uses Python's standard library; no extra Python packages are need
 
    If your system uses `python` for Python 3, you can instead run `python road_simulation.py`.
 
-3. Enter a driver name when prompted. Press Enter without a name to use `Driver`.
+3. Enter a driver name when prompted and **press enter**. **Press Enter** without a name to use `Driver`.
 4. Use the road editor menu:
    - **1** appends a sign to the end of the road.
    - **2** inserts a sign at a segment position.
